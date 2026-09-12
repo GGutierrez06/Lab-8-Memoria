@@ -58,7 +58,7 @@ public class GUIBatalla extends JPanel {
     private JPanel panelChat;
     private JPanel panelCambiar;
     private GUIObjetos panelObjetos;
-    private JPanel panelEquipo;
+    private  GUIMiEquipo panelEquipo;
     private JTextArea areaHistorial;
     private Timer timerDanio;
     private Batalla batalla;
@@ -306,9 +306,10 @@ public class GUIBatalla extends JPanel {
         btnMiEquipo.setFocusable(false);
 
 
-        btnAtacar.addActionListener(e ->
-                realizarAtaque()
-        );
+        btnAtacar.addActionListener(e ->{
+                mostrarChat();
+                realizarAtaque();
+        });
 
 
         btnCambiar.addActionListener(e ->cardLayout.show(panelCards, "CAMBIAR"));
@@ -333,7 +334,7 @@ public class GUIBatalla extends JPanel {
         panelChat = crearPanelChat();
         panelCambiar = new GUICambiar (this);
         panelObjetos = new  GUIObjetos(this);
-        panelEquipo = crearPanelEquipo();
+        panelEquipo = new  GUIMiEquipo(this);
 
         panelCards.add(panelChat,"CHAT" );
 
