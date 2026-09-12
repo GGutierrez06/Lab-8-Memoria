@@ -13,15 +13,26 @@ package lab8memoria;
 import java.awt.*;
 import javax.swing.*;
 
+import lab8memoria.modelo.Entrenador;
+
 public class GUIMenu extends JPanel {
 
     private JButton btnAdministrarEquipo;
     private JButton btnCerrarSesion;
     private JButton btnIniciarBatalla;
     private JLabel lblNombre;
+    private GUIPantalla padre;
 
     public GUIMenu(GUIPantalla padre) {
+        this.padre = padre;
         inicializarComponentes(padre);
+    }
+
+    public void actualizar() {
+        Entrenador jugador = padre.getJugador();
+        if (jugador != null) {
+            lblNombre.setText(jugador.getNombre());
+        }
     }
 
     private void inicializarComponentes(GUIPantalla padre) {

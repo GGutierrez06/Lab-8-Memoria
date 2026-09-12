@@ -12,14 +12,21 @@ package lab8memoria;
     
 import java.awt.*;
 import javax.swing.*;
+
+import lab8memoria.modelo.Entrenador;
+
 public class GUIPantalla  extends JFrame {
     private CardLayout cardLayout;
     private JPanel panelCards;
     private GUILogin login;
-    private GUICrearCuenta crear; 
+    private GUICrearCuenta crear;
     private GUIInicio inicio;
     private GUIMenu menu;
+<<<<<<< HEAD
     private GUIBatalla batalla;
+=======
+    private Entrenador jugador;
+>>>>>>> 705dd92a74e41b028e205732f7ee51b8610e4615
 
   
     public GUIPantalla() {
@@ -84,7 +91,13 @@ public class GUIPantalla  extends JFrame {
         panelCards.repaint();
     }
 
-   
+    public void establecerJugador(Entrenador jugador) {
+        this.jugador = jugador;
+        menu.actualizar();
+    }
 
-    
+    public Entrenador getJugador() {
+        return jugador;
+    }
+
 }
