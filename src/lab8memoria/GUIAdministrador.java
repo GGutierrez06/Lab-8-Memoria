@@ -12,9 +12,13 @@ package lab8memoria;
 import java.awt.*;
 import javax.swing.*;
 
+import lab8memoria.modelo.Entrenador;
+import lab8memoria.modelo.ListaEnlazada;
+import lab8memoria.modelo.Pokemon;
+
 public class GUIAdministrador extends JDialog {
 
-    private JFrame pantalla;
+    private GUIPantalla pantalla;
 
     private JLabel lblTitulo;
     private JLabel lblReferencia;
@@ -35,6 +39,14 @@ public class GUIAdministrador extends JDialog {
         super(pantalla, "Gestión de equipo", true);
 
         this.pantalla = pantalla;
+
+        if (pantalla.getJugador() == null) {
+            Entrenador demo = new Entrenador("Entrenador de prueba");
+            demo.agregarPokemon(new Pokemon("Pikachu", "Electrico", 15, 100));
+            demo.agregarPokemon(new Pokemon("Charizard", "Fuego", 18, 120));
+            demo.agregarPokemon(new Pokemon("Bulbasaur", "Planta", 14, 90));
+            pantalla.establecerJugador(demo);
+        }
 
         inicializarComponentes();
 
@@ -104,16 +116,22 @@ public class GUIAdministrador extends JDialog {
         btnMover.setFocusable(false);
 
         
-        btnAgregar.addActionListener(e -> { 
-        
+        btnAgregar.addActionListener(e -> {
+
         });
 
-       
+
         btnBuscar.addActionListener(e -> {
-           
+            String nombre = JOptionPane.showInputDialog(this, "Nombre del pokemon:");
+            if (nombre == null || nombre.isBlank()) {
+                return;
+            }
+            Pokemon encontrado = pantalla.getJugador().getEquipo().buscar(nombre);
+            String mensaje = encontrado == null ? "No existe." : encontrado.toString();
+            JOptionPane.showMessageDialog(this, mensaje);
         });
 
-    
+
         btnEliminar.addActionListener(e -> {
             JToggleButton seleccionado =
                     obtenerPokemonSeleccionado();
@@ -122,10 +140,12 @@ public class GUIAdministrador extends JDialog {
                 return;
             }
 
-          
+            String nombre = seleccionado.getText().trim().split("\\s+")[0];
+            pantalla.getJugador().getEquipo().eliminar(nombre);
+            pintarEquipo();
         });
 
-     
+
         btnMover.addActionListener(e -> {
             JToggleButton seleccionado =
                     obtenerPokemonSeleccionado();
@@ -134,7 +154,9 @@ public class GUIAdministrador extends JDialog {
                 return;
             }
 
-            
+            String nombre = seleccionado.getText().trim().split("\\s+")[0];
+            pantalla.getJugador().getEquipo().moverAlPrimerLugar(nombre);
+            pintarEquipo();
         });
 
         panelBotones.add(btnAgregar);
@@ -146,24 +168,25 @@ public class GUIAdministrador extends JDialog {
 
         add(panelInferior, BorderLayout.SOUTH);
 
-        crearBotonesTemporales();
+        pintarEquipo();
     }
 
-    private void crearBotonesTemporales() {
+    private void pintarEquipo() {
+        panelLista.removeAll();
         grupoPokemon = new ButtonGroup();
 
-        /*
-         * Arreglo temporal.
-         *
-         * Más adelante se reemplazará por el recorrido
-         * de la lista enlazada de Pokémon.
-         */
-        botonesPokemon = new JToggleButton[5];
+        ListaEnlazada equipo = pantalla.getJugador().getEquipo();
+        int cantidad = equipo.contar();
+        botonesPokemon = new JToggleButton[cantidad];
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < cantidad; i++) {
 
-            
-            String informacion = String.format( "%-25s %-15s %-20s %-15s", "", "", "",  "" );
+            Pokemon p = equipo.obtenerPorIndice(i);
+            String informacion = String.format( "%-25s %-15s %-20s %-15s",
+                    p.getNombre(),
+                    "Nivel " + p.getNivel(),
+                    p.getHp() + "/" + p.getHpMaximo(),
+                    p.getTipo() );
 
             JToggleButton botonPokemon =new JToggleButton(informacion);
 
@@ -179,21 +202,23 @@ public class GUIAdministrador extends JDialog {
 
             botonPokemon.setFocusable(false);
 
+            botonPokemon.setEnabled(!p.estaDerrotado());
+
             botonPokemon.setOpaque(true);
             botonPokemon.setContentAreaFilled(true);
-            botonPokemon.setBackground(Color.WHITE);
+            botonPokemon.setBackground(p.estaDerrotado() ? Color.LIGHT_GRAY : Color.WHITE);
             botonPokemon.setForeground(Color.BLACK);
 
-           
+
             botonPokemon.addChangeListener(e -> {
                 if (botonPokemon.isSelected()) {
                     botonPokemon.setBackground(Color.YELLOW);
                 } else {
-                    botonPokemon.setBackground(Color.WHITE);
+                    botonPokemon.setBackground(p.estaDerrotado() ? Color.LIGHT_GRAY : Color.WHITE);
                 }
             });
 
-          
+
             grupoPokemon.add(botonPokemon);
 
             botonesPokemon[i] = botonPokemon;
@@ -203,7 +228,10 @@ public class GUIAdministrador extends JDialog {
             panelLista.add(  Box.createRigidArea(new Dimension(0, 5)) );
         }
 
-        lblCantidad.setText( "Pokémon disponibles: " + botonesPokemon.length);
+        lblCantidad.setText( "Pokémon disponibles: " + equipo.contarDisponibles());
+
+        panelLista.revalidate();
+        panelLista.repaint();
     }
 
     private JToggleButton obtenerPokemonSeleccionado() {
