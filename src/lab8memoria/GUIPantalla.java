@@ -83,6 +83,7 @@ public class GUIPantalla  extends JFrame {
 
     public void establecerJugador(Entrenador jugador) {
         this.jugador = jugador;
+        menu.actualizar();
     }
 
     public Entrenador getJugador() {
