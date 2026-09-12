@@ -541,14 +541,28 @@ public class GUIBatalla extends JPanel {
         return jugador;
     }
     
-    public String usarObjetoDelJugador(int indiceObjeto) {
+    public void usarObjetoDelJugador(int indiceObjeto) {
         if (batalla == null) {
-            return "No hay batalla en curso.";
+            return;
         }
+
+        mostrarChat();
+
         String resultado = batalla.usarObjeto(indiceObjeto);
+        agregarAlHistorial(resultado);
+
+        if (resolverEstadoBatalla()) {
+            return;
+        }
+
+        String textoRival = batalla.turnoRival();
+        if (!textoRival.isEmpty()) {
+            agregarAlHistorial(textoRival);
+            parpadearDanio(false);
+        }
+
         resolverEstadoBatalla();
         actualizarInformacion();
-        return resultado;
     }
 
     private void realizarAtaque() {

@@ -205,9 +205,7 @@ public class GUIObjetos extends JPanel {
     }
 
     private void usarObjeto(int indice) {
-        String resultado = padre.usarObjetoDelJugador(indice);
-
-        padre.agregarAlHistorial(resultado);
+        padre.usarObjetoDelJugador(indice);
 
         recargarLista();
         mostrarHistorial();
