@@ -68,8 +68,10 @@ public class GUIBatalla extends JPanel {
     private Batalla batalla;
     private Entrenador jugador;
     private Entrenador rival;
+    private GUIPantalla padre;
 
     public GUIBatalla(GUIPantalla padre) {
+        this.padre = padre;
         inicializarComponentes();
     }
 
@@ -594,12 +596,14 @@ public class GUIBatalla extends JPanel {
         if (batalla.jugadorGano()) {
             actualizarInformacion();
             JOptionPane.showMessageDialog(this, "¡Ganaste la batalla!");
+            padre.mostrarCard("menu");
             return true;
         }
 
         if (batalla.jugadorPerdio()) {
             actualizarInformacion();
             JOptionPane.showMessageDialog(this, "Perdiste la batalla...");
+            padre.mostrarCard("menu");
             return true;
         }
 
