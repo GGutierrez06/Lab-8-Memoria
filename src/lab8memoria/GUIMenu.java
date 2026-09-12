@@ -16,7 +16,6 @@ import javax.swing.*;
 public class GUIMenu extends JPanel {
 
     private JButton btnAdministrarEquipo;
-    private JButton btnVerInventario;
     private JButton btnCerrarSesion;
     private JButton btnIniciarBatalla;
     private JLabel lblNombre;
@@ -33,14 +32,19 @@ public class GUIMenu extends JPanel {
         barraSuperior.setBackground(new Color(20, 20, 35));
 
         btnAdministrarEquipo = new JButton("Administrar equipo");
-        btnVerInventario = new JButton("Ver inventario");
+        btnAdministrarEquipo.addActionListener(ev->{
+        new GUIAdministrador(padre);
+        
+        });
+        
+       
         btnCerrarSesion = new JButton("Cerrar sesión");
 
         lblNombre = new JLabel("nombre");
         lblNombre.setForeground(Color.BLUE);
 
         btnAdministrarEquipo.setFocusable(false);
-        btnVerInventario.setFocusable(false);
+       
         btnCerrarSesion.setFocusable(false);
 
         btnCerrarSesion.addActionListener(ev -> {
@@ -50,7 +54,7 @@ public class GUIMenu extends JPanel {
         barraSuperior.add(lblNombre);
         barraSuperior.add(Box.createHorizontalStrut(1100));
         barraSuperior.add(btnAdministrarEquipo);
-        barraSuperior.add(btnVerInventario);
+    
         barraSuperior.add(btnCerrarSesion);
 
         add(barraSuperior, BorderLayout.NORTH);
