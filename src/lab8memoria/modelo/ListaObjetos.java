@@ -28,6 +28,19 @@ public class ListaObjetos {
         return null;
     }
 
+    public Objeto obtenerPorIndice(int indice) {
+        NodoObjeto actual = cabeza;
+        int i = 0;
+        while (actual != null) {
+            if (i == indice) {
+                return actual.getObjeto();
+            }
+            i++;
+            actual = actual.getSiguiente();
+        }
+        return null;
+    }
+
     public int contar() {
         int total = 0;
         NodoObjeto actual = cabeza;
