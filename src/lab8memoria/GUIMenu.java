@@ -100,7 +100,18 @@ public class GUIMenu extends JPanel {
         btnIniciarBatalla.setPreferredSize(new Dimension(250, 70));
         btnIniciarBatalla.setFocusable(false);
         btnIniciarBatalla.addActionListener(ev->{
-        padre.iniciarBatalla();
+             Entrenador jugador = padre.getJugador();
+
+                if (jugador == null|| jugador.getEquipo() == null|| jugador.getEquipo().contar() == 0) {
+
+                    
+
+                    new GUIAdministrador(padre);
+                    return;
+                }
+
+                padre.iniciarBatalla();
+        
         });
 
         gbc.gridy = 1;
