@@ -4,6 +4,8 @@
  */
 package lab8memoria;
 
+
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -472,25 +474,33 @@ public class GUIBatalla extends JPanel {
             imagen = lblImagenJugador;
         }
 
-        if (timerDanio != null&& timerDanio.isRunning()) {
+        if (timerDanio != null && timerDanio.isRunning()) {
             timerDanio.stop();
         }
 
+        final Icon iconoOriginal = imagen.getIcon();
+        final String textoOriginal = imagen.getText();
         final int[] contador = {0};
 
-        timerDanio = new Timer(  100,new ActionListener() {
-            
-            public void actionPerformed(
-                    ActionEvent e ) {
-                imagen.setVisible( !imagen.isVisible());
+        timerDanio = new Timer(100, e -> {
+            contador[0]++;
 
-                contador[0]++;
-
-                if (contador[0] >= 6) {
-                    imagen.setVisible(true);
-                    timerDanio.stop();
-                }
+            if (contador[0] % 2 == 1) {
+                imagen.setIcon(null);
+                imagen.setText("");
+            } else {
+                imagen.setIcon(iconoOriginal);
+                imagen.setText(textoOriginal);
             }
+
+            if (contador[0] >= 6) {
+                imagen.setIcon(iconoOriginal);
+                imagen.setText(textoOriginal);
+                timerDanio.stop();
+            }
+
+            imagen.revalidate();
+            imagen.repaint();
         });
 
         timerDanio.start();
