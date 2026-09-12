@@ -4,10 +4,12 @@ public class Entrenador {
 
     private String nombre;
     private ListaEnlazada equipo;
+    private ListaObjetos objetos;
 
     public Entrenador(String nombre) {
         this.nombre = nombre;
         this.equipo = new ListaEnlazada();
+        this.objetos = new ListaObjetos();
     }
 
     public String getNombre() {
@@ -20,6 +22,10 @@ public class Entrenador {
 
     public ListaEnlazada getEquipo() {
         return equipo;
+    }
+
+    public ListaObjetos getObjetos() {
+        return objetos;
     }
 
     public void agregarPokemon(Pokemon pokemon) {
