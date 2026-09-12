@@ -19,11 +19,16 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+
+import lab8memoria.logica.Batalla;
+import lab8memoria.modelo.Entrenador;
+import lab8memoria.modelo.Pokemon;
 
 public class GUIBatalla extends JPanel {
 
@@ -56,6 +61,9 @@ public class GUIBatalla extends JPanel {
     private JPanel panelEquipo;
     private JTextArea areaHistorial;
     private Timer timerDanio;
+    private Batalla batalla;
+    private Entrenador jugador;
+    private Entrenador rival;
 
     public GUIBatalla(GUIPantalla padre) {
         inicializarComponentes();
@@ -331,7 +339,7 @@ public class GUIBatalla extends JPanel {
         btnMiEquipo.setFocusable(false);
 
         btnAtacar.addActionListener(e ->
-                cardLayout.show(panelCards, "CHAT")
+                realizarAtaque()
         );
 
         btnCambiar.addActionListener(e ->
@@ -627,5 +635,82 @@ public class GUIBatalla extends JPanel {
             ImageIcon imagen) {
         lblImagenJugador.setText("");
         lblImagenJugador.setIcon(imagen);
+    }
+
+    public void iniciarBatalla(Entrenador jugador, Entrenador rival) {
+        this.jugador = jugador;
+        this.rival = rival;
+        this.batalla = new Batalla(jugador, rival);
+
+        areaHistorial.setText("");
+        establecerNombreJugador(jugador.getNombre());
+        establecerNombreRival(rival.getNombre());
+        actualizarInformacion();
+        mostrarChat();
+    }
+
+    private void realizarAtaque() {
+        if (batalla == null) {
+            return;
+        }
+
+        mostrarChat();
+
+        String textoAtaque = batalla.atacar(0);
+        agregarAlHistorial(textoAtaque);
+        parpadearDanio(true);
+
+        if (resolverEstadoBatalla()) {
+            return;
+        }
+
+        String textoRival = batalla.turnoRival();
+        if (!textoRival.isEmpty()) {
+            agregarAlHistorial(textoRival);
+            parpadearDanio(false);
+        }
+
+        resolverEstadoBatalla();
+        actualizarInformacion();
+    }
+
+    private boolean resolverEstadoBatalla() {
+        if (batalla.jugadorGano()) {
+            actualizarInformacion();
+            JOptionPane.showMessageDialog(this, "¡Ganaste la batalla!");
+            return true;
+        }
+
+        if (batalla.jugadorPerdio()) {
+            actualizarInformacion();
+            JOptionPane.showMessageDialog(this, "Perdiste la batalla...");
+            return true;
+        }
+
+        if (batalla.hayDerrotado()) {
+            String textoContinuar = batalla.continuarConSiguiente();
+            if (!textoContinuar.isEmpty()) {
+                agregarAlHistorial(textoContinuar);
+            }
+        }
+
+        return false;
+    }
+
+    private void actualizarInformacion() {
+        Pokemon activoJugador = jugador.getEquipo().obtenerActivo();
+        Pokemon activoRival = rival.getEquipo().obtenerActivo();
+
+        String nombreJugador = activoJugador != null ? activoJugador.getNombre() : "-";
+        String nivelJugador = activoJugador != null ? String.valueOf(activoJugador.getNivel()) : "-";
+        String vidaJugador = activoJugador != null ? (activoJugador.getHp() + "/" + activoJugador.getHpMaximo()) : "-";
+        String tipoJugador = activoJugador != null ? activoJugador.getTipo() : "-";
+
+        String nombreRival = activoRival != null ? activoRival.getNombre() : "-";
+        String nivelRival = activoRival != null ? String.valueOf(activoRival.getNivel()) : "-";
+        String vidaRival = activoRival != null ? (activoRival.getHp() + "/" + activoRival.getHpMaximo()) : "-";
+        String tipoRival = activoRival != null ? activoRival.getTipo() : "-";
+
+        refrescarInformacion(nombreRival, nivelRival, vidaRival, tipoRival,nombreJugador, nivelJugador, vidaJugador, tipoJugador);
     }
 }
