@@ -26,6 +26,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import lab8memoria.modelo.Entrenador;
+import lab8memoria.modelo.ListaObjetos;
+import lab8memoria.modelo.Objeto;
+
 public class GUIObjetos extends JPanel {
 
     private GUIBatalla padre;
@@ -110,10 +114,29 @@ public class GUIObjetos extends JPanel {
     }
 
     private void crearBotonesTemporales() {
-        botonesObjetos = new JButton[5];
+        Entrenador jugador = padre.getJugador();
 
-        for (int i = 0; i < 5; i++) {
-            JButton botonObjeto = new JButton("");
+        if (jugador == null) {
+            botonesObjetos = new JButton[0];
+            JLabel sinBatalla = new JLabel("Aun no hay una batalla en curso.");
+            panelLista.add(sinBatalla);
+            return;
+        }
+
+        ListaObjetos objetos = jugador.getObjetos();
+        int total = objetos.contar();
+
+        botonesObjetos = new JButton[total];
+
+        if (total == 0) {
+            panelLista.add(new JLabel("No tienes objetos disponibles."));
+            return;
+        }
+
+        for (int i = 0; i < total; i++) {
+            Objeto objeto = objetos.obtenerPorIndice(i);
+
+            JButton botonObjeto = new JButton(textoBoton(objeto));
 
             botonObjeto.setFont(
                     new Font(
@@ -147,13 +170,17 @@ public class GUIObjetos extends JPanel {
 
             botonObjeto.setFocusable(false);
 
+            botonObjeto.setEnabled(objeto.getCantidad() > 0);
+
+            final int indice = i;
+
             botonObjeto.addActionListener(
                     new ActionListener() {
                 @Override
                 public void actionPerformed(
                         ActionEvent e
                 ) {
-                    usarObjeto(botonObjeto);
+                    usarObjeto(indice);
                 }
             });
 
@@ -172,7 +199,16 @@ public class GUIObjetos extends JPanel {
         }
     }
 
-    private void usarObjeto(JButton botonObjeto) {
+    private String textoBoton(Objeto objeto) {
+        return objeto.getNombre() + " - " + objeto.getDescripcion()
+                + " (x" + objeto.getCantidad() + ")";
+    }
+
+    private void usarObjeto(int indice) {
+        String resultado = padre.usarObjetoDelJugador(indice);
+
+        padre.agregarAlHistorial(resultado);
+
         recargarLista();
         mostrarHistorial();
     }

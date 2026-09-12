@@ -28,6 +28,7 @@ import javax.swing.Timer;
 
 import lab8memoria.logica.Batalla;
 import lab8memoria.modelo.Entrenador;
+import lab8memoria.modelo.Objeto;
 import lab8memoria.modelo.Pokemon;
 
 public class GUIBatalla extends JPanel {
@@ -505,11 +506,32 @@ public class GUIBatalla extends JPanel {
         this.rival = rival;
         this.batalla = new Batalla(jugador, rival);
 
+        if (jugador.getObjetos().contar() == 0) {
+            jugador.getObjetos().insertar(new Objeto("Pocion", "Recupera 20 HP", 20, 3));
+            jugador.getObjetos().insertar(new Objeto("Superpocion", "Recupera 50 HP", 50, 2));
+            jugador.getObjetos().insertar(new Objeto("Revivir", "Revive a un Pokemon derrotado", 0, 1));
+        }
+
         areaHistorial.setText("");
         establecerNombreJugador(jugador.getNombre());
         establecerNombreRival(rival.getNombre());
         actualizarInformacion();
+        panelObjetos.recargarLista();
         mostrarChat();
+    }
+    
+    public Entrenador getJugador() {
+        return jugador;
+    }
+    
+    public String usarObjetoDelJugador(int indiceObjeto) {
+        if (batalla == null) {
+            return "No hay batalla en curso.";
+        }
+        String resultado = batalla.usarObjeto(indiceObjeto);
+        resolverEstadoBatalla();
+        actualizarInformacion();
+        return resultado;
     }
 
     private void realizarAtaque() {
@@ -560,9 +582,6 @@ public class GUIBatalla extends JPanel {
         return false;
     }
 
-    public Entrenador getJugador() {
-        return jugador;
-    }
 
     public boolean cambiarPokemon(String nombre) {
         if (jugador == null) {

@@ -2,6 +2,7 @@ package lab8memoria.logica;
 
 import lab8memoria.modelo.Ataque;
 import lab8memoria.modelo.Entrenador;
+import lab8memoria.modelo.Objeto;
 import lab8memoria.modelo.Pokemon;
 
 public class Batalla {
@@ -49,6 +50,21 @@ public class Batalla {
             historial.agregar(turno, defensor.getNombre() + " fue derrotado.");
         }
         return texto;
+    }
+
+    public String usarObjeto(int indiceObjeto) {
+        Objeto objeto = jugador.getObjetos().obtenerPorIndice(indiceObjeto);
+        if (objeto == null) {
+            return "Ese objeto no esta disponible.";
+        }
+        Pokemon pokemon = jugador.getEquipo().obtenerActivo();
+        if (pokemon == null) {
+            return "No hay Pokemon activo.";
+        }
+        String resultado = jugador.getObjetos().usar(objeto, pokemon);
+        historial.agregar(turno, jugador.getNombre() + " utilizo " + objeto.getNombre() + ".");
+        historial.agregar(turno, resultado);
+        return resultado;
     }
 
     public String turnoRival() {
