@@ -12,6 +12,7 @@ package lab8memoria;
 import javax.swing. *;
 import java.awt. *;
 import javax.swing.JPanel;
+
 public class GUIInicio extends JPanel {
     private JButton boton1;
     private JButton boton2;
@@ -94,7 +95,7 @@ public class GUIInicio extends JPanel {
         });
         
         
-        boton3 = new JButton("Usuario random");
+        boton3 = new JButton("Rival random");
 
         boton3.setFont(new Font("Arial", Font.BOLD, 14));
         boton3.setPreferredSize(new Dimension(600, 150));
@@ -112,7 +113,7 @@ public class GUIInicio extends JPanel {
         boton3.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         boton3.addActionListener(e -> {
-            ///////////////////////////////////////////////////////////////////////////sin logica aun de usuario random
+            padre.iniciarBatallaConRivalAleatorio();
         });
         
         boton4 = new JButton("Salir");

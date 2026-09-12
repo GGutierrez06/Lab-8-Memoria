@@ -9,15 +9,13 @@ package lab8memoria;
  * @author denam
  */
 
-   
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,6 +23,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import lab8memoria.modelo.Entrenador;
+import lab8memoria.modelo.ListaEnlazada;
+import lab8memoria.modelo.Pokemon;
 
 public class GUICambiar extends JPanel {
 
@@ -34,7 +36,7 @@ public class GUICambiar extends JPanel {
     private JScrollPane scrollLista;
     private JButton btnCerrar;
 
-    private JButton[] botonesObjetos;
+    private JButton[] botonesPokemon;
 
     public GUICambiar(GUIBatalla padre) {
         this.padre = padre;
@@ -100,7 +102,7 @@ public class GUICambiar extends JPanel {
     public void recargarLista() {
         panelLista.removeAll();
 
-        crearBotonesTemporales();
+        pintarPokemones();
 
         panelLista.revalidate();
         panelLista.repaint();
@@ -109,13 +111,33 @@ public class GUICambiar extends JPanel {
         repaint();
     }
 
-    private void crearBotonesTemporales() {
-        botonesObjetos = new JButton[5];
+    private void pintarPokemones() {
+        Entrenador jugador = padre.getJugador();
+        if (jugador == null) {
+            botonesPokemon = new JButton[0];
+            return;
+        }
 
-        for (int i = 0; i < 5; i++) {
-            JButton botonObjeto = new JButton("");
+        ListaEnlazada equipo = jugador.getEquipo();
+        Pokemon activo = equipo.obtenerActivo();
+        int cantidad = equipo.contar();
+        botonesPokemon = new JButton[cantidad];
 
-            botonObjeto.setFont(
+        for (int i = 0; i < cantidad; i++) {
+            Pokemon p = equipo.obtenerPorIndice(i);
+
+            String estado = p.estaDerrotado() ? "DERROTADO" : p.getTipo();
+            String informacion = String.format(
+                    "%-20s %-12s %-15s %-12s",
+                    p.getNombre(),
+                    "Nivel " + p.getNivel(),
+                    p.getHp() + "/" + p.getHpMaximo(),
+                    estado
+            );
+
+            JButton botonPokemon = new JButton(informacion);
+
+            botonPokemon.setFont(
                     new Font(
                             "Monospaced",
                             Font.PLAIN,
@@ -123,43 +145,49 @@ public class GUICambiar extends JPanel {
                     )
             );
 
-            botonObjeto.setHorizontalAlignment(
+            botonPokemon.setHorizontalAlignment(
                     JButton.LEFT
             );
 
-            botonObjeto.setPreferredSize(
+            botonPokemon.setPreferredSize(
                     new Dimension(
                             500,
                             45
                     )
             );
 
-            botonObjeto.setMaximumSize(
+            botonPokemon.setMaximumSize(
                     new Dimension(
                             Integer.MAX_VALUE,
                             45
                     )
             );
 
-            botonObjeto.setAlignmentX(
+            botonPokemon.setAlignmentX(
                     LEFT_ALIGNMENT
             );
 
-            botonObjeto.setFocusable(false);
+            botonPokemon.setFocusable(false);
 
-            botonObjeto.addActionListener(
-                    new ActionListener() {
-                @Override
-                public void actionPerformed(
-                        ActionEvent e
-                ) {
-                    usarObjeto(botonObjeto);
-                }
-            });
+            botonPokemon.setOpaque(true);
+            botonPokemon.setContentAreaFilled(true);
 
-            botonesObjetos[i] = botonObjeto;
+            if (p == activo) {
+                botonPokemon.setBackground(Color.YELLOW);
+            } else if (p.estaDerrotado()) {
+                botonPokemon.setBackground(Color.LIGHT_GRAY);
+            } else {
+                botonPokemon.setBackground(Color.WHITE);
+            }
 
-            panelLista.add(botonObjeto);
+            botonPokemon.setEnabled(p != activo && !p.estaDerrotado());
+
+            String nombre = p.getNombre();
+            botonPokemon.addActionListener(e -> seleccionarPokemon(nombre));
+
+            botonesPokemon[i] = botonPokemon;
+
+            panelLista.add(botonPokemon);
 
             panelLista.add(
                     Box.createRigidArea(
@@ -172,9 +200,9 @@ public class GUICambiar extends JPanel {
         }
     }
 
-    private void usarObjeto(JButton botonObjeto) {
+    private void seleccionarPokemon(String nombre) {
+        padre.cambiarPokemon(nombre);
         recargarLista();
-        mostrarHistorial();
     }
 
     public void mostrarHistorial() {

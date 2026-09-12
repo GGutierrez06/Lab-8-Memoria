@@ -59,6 +59,13 @@ public class GUIMenu extends JPanel {
         btnCerrarSesion.setFocusable(false);
 
         btnCerrarSesion.addActionListener(ev -> {
+            if (padre.getUsuarioActual() != null) {
+                try {
+                    padre.getGestorArchivos().guardarEquipo(padre.getUsuarioActual());
+                } catch (java.io.IOException e) {
+                    JOptionPane.showMessageDialog(this, "Error guardando equipo: " + e.getMessage());
+                }
+            }
             padre.mostrarCard("inicio");
         });
 
@@ -93,7 +100,7 @@ public class GUIMenu extends JPanel {
         btnIniciarBatalla.setPreferredSize(new Dimension(250, 70));
         btnIniciarBatalla.setFocusable(false);
         btnIniciarBatalla.addActionListener(ev->{
-        padre.mostrarCard("batalla");
+        padre.iniciarBatalla();
         });
 
         gbc.gridy = 1;

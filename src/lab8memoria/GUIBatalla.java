@@ -56,7 +56,7 @@ public class GUIBatalla extends JPanel {
     private CardLayout cardLayout;
     private JPanel panelCards;
     private JPanel panelChat;
-    private JPanel panelCambiar;
+    private GUICambiar panelCambiar;
     private GUIObjetos panelObjetos;
     private  GUIMiEquipo panelEquipo;
     private JTextArea areaHistorial;
@@ -312,7 +312,10 @@ public class GUIBatalla extends JPanel {
         });
 
 
-        btnCambiar.addActionListener(e ->cardLayout.show(panelCards, "CAMBIAR"));
+        btnCambiar.addActionListener(e -> {
+            panelCambiar.recargarLista();
+            cardLayout.show(panelCards, "CAMBIAR");
+        });
 
         btnObjetos.addActionListener(e -> cardLayout.show(panelCards, "OBJETOS")  );
 
@@ -561,6 +564,23 @@ public class GUIBatalla extends JPanel {
         }
 
         return false;
+    }
+
+    public Entrenador getJugador() {
+        return jugador;
+    }
+
+    public boolean cambiarPokemon(String nombre) {
+        if (jugador == null) {
+            return false;
+        }
+        boolean cambiado = jugador.getEquipo().establecerActivo(nombre);
+        if (cambiado) {
+            actualizarInformacion();
+            agregarAlHistorial("Cambiaste a " + nombre + ".");
+            mostrarChat();
+        }
+        return cambiado;
     }
 
     private void actualizarInformacion() {

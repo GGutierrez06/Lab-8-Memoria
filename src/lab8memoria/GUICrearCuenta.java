@@ -13,6 +13,9 @@ package lab8memoria;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+
+import lab8memoria.archivos.Usuario;
 
 public class GUICrearCuenta extends JPanel {
 
@@ -23,10 +26,12 @@ public class GUICrearCuenta extends JPanel {
     private Timer tempo;
     private CardLayout cardLayout;
     private JPanel cards;
+    private GUIPantalla padre;
 
     public GUICrearCuenta(CardLayout cardLayout, JPanel cards, GUIPantalla padre) {
         this.cardLayout = cardLayout;
         this.cards = cards;
+        this.padre = padre;
 
         inicializarComponentes(padre);
         inicializarTimer();
@@ -164,25 +169,26 @@ public class GUICrearCuenta extends JPanel {
             return;
         }
 
-        /*
-         * Aquí debes conectar tu ArchivoUsuarioWin.
-         *
-         * Ejemplo:
-         *
-         * ArchivoUsuarioWin archivo = new ArchivoUsuarioWin();
-         * UsuarioWin usuarioNuevo = new UsuarioWin(
-         *         usuario,
-         *         contra,
-         *         false
-         * );
-         *
-         * archivo.agregarUsuario(usuarioNuevo);
-         */
+        boolean creado = padre.getListaUsuarios().crear(usuario, new String(contra));
+        if (!creado) {
+            labelMensaje.setVisible(true);
+            labelMensaje.setText("Ese usuario ya existe");
+            tempo.start();
+            return;
+        }
 
-        
+        try {
+            padre.getGestorArchivos().guardarUsuarios(padre.getListaUsuarios());
+        } catch (IOException e) {
+            labelMensaje.setVisible(true);
+            labelMensaje.setText("Error guardando usuario: " + e.getMessage());
+            tempo.start();
+            return;
+        }
 
+        Usuario nuevo = padre.getListaUsuarios().buscar(usuario);
         limpiarCampos();
-   
+        padre.iniciarSesionComo(nuevo);
     }
 
     public void limpiarCampos() {

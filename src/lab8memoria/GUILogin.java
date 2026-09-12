@@ -13,6 +13,8 @@ package lab8memoria;
 import java.awt.*;
 import javax.swing.*;
 
+import lab8memoria.archivos.Usuario;
+
 public class GUILogin extends JPanel {
 
     private JTextField txtUsuario;
@@ -22,10 +24,12 @@ public class GUILogin extends JPanel {
     private Timer tempo;
     private CardLayout cardLayout;
     private JPanel cards;
+    private GUIPantalla padre;
 
     public GUILogin(CardLayout cardLayout, JPanel cards, GUIPantalla padre) {
         this.cardLayout = cardLayout;
         this.cards = cards;
+        this.padre = padre;
 
         inicializarComponentes(padre);
         inicializarTimer();
@@ -135,9 +139,16 @@ public class GUILogin extends JPanel {
             return;
         }
 
-        ////////////////////////////////////////////////////////////////////////////comprobar si existe
+        Usuario encontrado = padre.getListaUsuarios().login(usuario, new String(contra));
+        if (encontrado == null) {
+            labelMensaje.setVisible(true);
+            labelMensaje.setText("Usuario o contraseña incorrectos");
+            tempo.start();
+            return;
+        }
 
-        
+        limpiarCampos();
+        padre.iniciarSesionComo(encontrado);
     }
 
     public void limpiarCampos() {
