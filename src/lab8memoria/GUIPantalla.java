@@ -18,6 +18,7 @@ public class GUIPantalla  extends JFrame {
     private GUILogin login;
     private GUICrearCuenta crear; 
     private GUIInicio inicio;
+    private GUIMenu menu;
 
   
     public GUIPantalla() {
@@ -33,7 +34,7 @@ public class GUIPantalla  extends JFrame {
         InitCardLayout();
         agregarCards();
         
-        mostrarCard("inicio");
+        mostrarCard("menu");
         
         
 
@@ -51,6 +52,9 @@ public class GUIPantalla  extends JFrame {
         
         inicio= new GUIInicio ( cardLayout, panelCards, this);
         agregarCard(inicio, "inicio");
+        
+        menu = new GUIMenu (this);
+         agregarCard(menu, "menu");
         
 
         
