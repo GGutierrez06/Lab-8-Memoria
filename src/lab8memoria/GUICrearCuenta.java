@@ -47,16 +47,16 @@ public class GUICrearCuenta extends JPanel {
         JPanel barraSuperior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         barraSuperior.setBackground(new Color(20, 20, 35));
 
-        JLabel mensaje = new JLabel("Tienes cuenta?");
+        JLabel mensaje = new JLabel(" ");
         mensaje.setForeground(Color.WHITE);
 
-        JButton btnLogin = new JButton("Log in");
+        JButton btnLogin = new JButton("volever");
         btnLogin.setFocusable(false);
 
         btnLogin.addActionListener(e -> {
             limpiarCampos();
             limpiarCampos();
-            padre.mostrarCard("login");
+            padre.mostrarCard("inicio");
         });
 
         barraSuperior.add(mensaje);
