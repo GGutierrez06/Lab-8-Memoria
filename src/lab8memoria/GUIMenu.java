@@ -81,6 +81,9 @@ public class GUIMenu extends JPanel {
         btnIniciarBatalla.setFont(new Font("Arial", Font.BOLD, 22));
         btnIniciarBatalla.setPreferredSize(new Dimension(250, 70));
         btnIniciarBatalla.setFocusable(false);
+        btnIniciarBatalla.addActionListener(ev->{
+        padre.mostrarCard("batalla");
+        });
 
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
