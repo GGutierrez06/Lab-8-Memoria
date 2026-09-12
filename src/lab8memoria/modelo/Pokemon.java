@@ -117,6 +117,10 @@ public class Pokemon {
             hp = hpMaximo;
         }
     }
+    
+    public Ataque[] getAtaques(){
+        return ataques;
+    }
 
     public String toString() {
         String texto = nombre + " Nivel " + nivel + " " + tipo + " " + hp + "/" + hpMaximo;
