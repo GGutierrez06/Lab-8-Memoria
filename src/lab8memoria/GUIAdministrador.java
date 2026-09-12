@@ -117,7 +117,45 @@ public class GUIAdministrador extends JDialog {
 
         
         btnAgregar.addActionListener(e -> {
+            JTextField campoNombre = new JTextField();
+            JTextField campoTipo = new JTextField();
+            JTextField campoNivel = new JTextField();
+            JTextField campoHpMaximo = new JTextField();
 
+            JPanel formulario = new JPanel(new GridLayout(4, 2, 5, 5));
+            formulario.add(new JLabel("Nombre:"));
+            formulario.add(campoNombre);
+            formulario.add(new JLabel("Tipo:"));
+            formulario.add(campoTipo);
+            formulario.add(new JLabel("Nivel:"));
+            formulario.add(campoNivel);
+            formulario.add(new JLabel("Vida maxima:"));
+            formulario.add(campoHpMaximo);
+
+            int opcion = JOptionPane.showConfirmDialog(this, formulario, "Agregar pokemon", JOptionPane.OK_CANCEL_OPTION);
+            if (opcion != JOptionPane.OK_OPTION) {
+                return;
+            }
+
+            String nombre = campoNombre.getText().trim();
+            String tipo = campoTipo.getText().trim();
+            if (nombre.isEmpty() || tipo.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nombre y tipo son obligatorios.");
+                return;
+            }
+
+            int nivel;
+            int hpMaximo;
+            try {
+                nivel = Integer.parseInt(campoNivel.getText().trim());
+                hpMaximo = Integer.parseInt(campoHpMaximo.getText().trim());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Nivel y vida deben ser numeros.");
+                return;
+            }
+
+            pantalla.getJugador().getEquipo().insertar(new Pokemon(nombre, tipo, nivel, hpMaximo));
+            pintarEquipo();
         });
 
 
