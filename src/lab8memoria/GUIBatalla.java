@@ -643,18 +643,18 @@ public class GUIBatalla extends JPanel {
 
         refrescarInformacion(nombreRival, nivelRival, vidaRival, tipoRival,nombreJugador, nivelJugador, vidaJugador, tipoJugador);
 
-        ImageIcon spriteJugador = obtenerSpriteBatalla(activoJugador != null ? activoJugador.getNombre() : null);
+        ImageIcon spriteJugador = obtenerSpriteBatalla(activoJugador != null ? activoJugador.getNombre() : null, 2);
         if (spriteJugador != null) {
             establecerImagenJugador(spriteJugador);
         }
 
-        ImageIcon spriteRival = obtenerSpriteBatalla(activoRival != null ? activoRival.getNombre() : null);
+        ImageIcon spriteRival = obtenerSpriteBatalla(activoRival != null ? activoRival.getNombre() : null, 1);
         if (spriteRival != null) {
             establecerImagenRival(spriteRival);
         }
     }
 
-    private ImageIcon obtenerSpriteBatalla(String nombrePokemon) {
+    private ImageIcon obtenerSpriteBatalla(String nombrePokemon, int numeroSprite) {
         if (nombrePokemon == null) {
             return null;
         }
@@ -664,7 +664,7 @@ public class GUIBatalla extends JPanel {
             archivo = "Bulbasour";
         }
 
-        java.net.URL recurso = getClass().getResource("/SpritesPokemons/" + archivo + "Sprite2.png");
+        java.net.URL recurso = getClass().getResource("/SpritesPokemons/" + archivo + "Sprite" + numeroSprite + ".png");
         if (recurso == null) {
             return null;
         }
