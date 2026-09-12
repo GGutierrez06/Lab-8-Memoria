@@ -52,7 +52,7 @@ public class GUIBatalla extends JPanel {
     private JPanel panelCards;
     private JPanel panelChat;
     private JPanel panelCambiar;
-    private JPanel panelObjetos;
+    private GUIObjetos panelObjetos;
     private JPanel panelEquipo;
     private JTextArea areaHistorial;
     private Timer timerDanio;
@@ -80,33 +80,25 @@ public class GUIBatalla extends JPanel {
     private void crearPanelBatalla() {
         panelBatalla = new JPanel(new BorderLayout());
         panelBatalla.setBackground(new Color(235, 235, 235));
-        panelBatalla.setBorder(
-                BorderFactory.createEmptyBorder(15, 20, 10, 20)
-        );
+        panelBatalla.setBorder(BorderFactory.createEmptyBorder(15, 20, 10, 20) );
 
         crearInformacionRival();
         crearInformacionJugador();
 
-        JPanel bloqueRival = new JPanel(
-                new FlowLayout(FlowLayout.CENTER, 0, 0)
-        );
+        JPanel bloqueRival = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0) );
 
         bloqueRival.setOpaque(false);
         bloqueRival.add(panelInformacionRival);
         bloqueRival.add(lblImagenRival);
 
-        JPanel bloqueJugador = new JPanel(
-                new FlowLayout(FlowLayout.CENTER, 0, 0)
-        );
+        JPanel bloqueJugador = new JPanel(  new FlowLayout(FlowLayout.CENTER, 0, 0) );
 
         bloqueJugador.setOpaque(false);
         bloqueJugador.add(lblImagenJugador);
         bloqueJugador.add(panelInformacionJugador);
 
         JPanel panelPokemons = new JPanel();
-        panelPokemons.setLayout(
-                new BoxLayout(panelPokemons, BoxLayout.Y_AXIS)
-        );
+        panelPokemons.setLayout(new BoxLayout(panelPokemons, BoxLayout.Y_AXIS) );
 
         panelPokemons.setOpaque(false);
 
@@ -251,11 +243,7 @@ public class GUIBatalla extends JPanel {
 
         datosJugador.setBackground(Color.WHITE);
 
-        datosJugador.setBorder(
-                BorderFactory.createLineBorder(
-                        Color.BLACK,
-                        2
-                )
+        datosJugador.setBorder( BorderFactory.createLineBorder(Color.BLACK,  2)
         );
 
         lblNombreJugador = new JLabel("Nombre: ");
@@ -283,42 +271,21 @@ public class GUIBatalla extends JPanel {
         lblImagenJugador.setBackground(Color.BLUE);
         lblImagenJugador.setForeground(Color.WHITE);
 
-        lblImagenJugador.setFont(
-                new Font("Arial", Font.BOLD, 18)
-        );
+        lblImagenJugador.setFont(new Font("Arial", Font.BOLD, 18));
 
-        lblImagenJugador.setHorizontalAlignment(
-                SwingConstants.CENTER
-        );
+        lblImagenJugador.setHorizontalAlignment( SwingConstants.CENTER);
 
-        lblImagenJugador.setVerticalAlignment(
-                SwingConstants.CENTER
-        );
+        lblImagenJugador.setVerticalAlignment( SwingConstants.CENTER);
 
-        lblImagenJugador.setPreferredSize(
-                new Dimension(200, 150)
-        );
+        lblImagenJugador.setPreferredSize(new Dimension(200, 150));
 
-        lblImagenJugador.setBorder(
-                BorderFactory.createLineBorder(
-                        Color.BLACK,
-                        2
-                )
-        );
+        lblImagenJugador.setBorder(BorderFactory.createLineBorder( Color.BLACK,2 ));
     }
 
     private void crearPanelControles() {
-        panelControles = new JPanel(
-                new FlowLayout(
-                        FlowLayout.CENTER,
-                        15,
-                        10
-                )
-        );
+        panelControles = new JPanel( new FlowLayout(FlowLayout.CENTER, 15,0));
 
-        panelControles.setBackground(
-                new Color(30, 30, 45)
-        );
+        panelControles.setBackground( new Color(30, 30, 45));
 
         btnAtacar = new JButton("Atacar");
         btnCambiar = new JButton("Cambiar");
@@ -330,21 +297,13 @@ public class GUIBatalla extends JPanel {
         btnObjetos.setFocusable(false);
         btnMiEquipo.setFocusable(false);
 
-        btnAtacar.addActionListener(e ->
-                cardLayout.show(panelCards, "CHAT")
-        );
+        btnAtacar.addActionListener(e ->cardLayout.show(panelCards, "CHAT") );
 
-        btnCambiar.addActionListener(e ->
-                cardLayout.show(panelCards, "CAMBIAR")
-        );
+        btnCambiar.addActionListener(e ->cardLayout.show(panelCards, "CAMBIAR"));
 
-        btnObjetos.addActionListener(e ->
-                cardLayout.show(panelCards, "OBJETOS")
-        );
+        btnObjetos.addActionListener(e -> cardLayout.show(panelCards, "OBJETOS")  );
 
-        btnMiEquipo.addActionListener(e ->
-                cardLayout.show(panelCards, "EQUIPO")
-        );
+        btnMiEquipo.addActionListener(e -> cardLayout.show(panelCards, "EQUIPO") );
 
         panelControles.add(btnAtacar);
         panelControles.add(btnCambiar);
@@ -355,132 +314,65 @@ public class GUIBatalla extends JPanel {
     private void crearPanelCards() {
         cardLayout = new CardLayout();
 
-        panelCards = new JPanel(
-                cardLayout
-        );
+        panelCards = new JPanel( cardLayout);
 
-        panelCards.setPreferredSize(
-                new Dimension(900, 250)
-        );
+        panelCards.setPreferredSize( new Dimension(900, 250) );
 
         panelChat = crearPanelChat();
-        panelCambiar = crearPanelCambiar();
-        panelObjetos = crearPanelObjetos();
+        panelCambiar = new GUICambiar (this);
+        panelObjetos = new  GUIObjetos(this);
         panelEquipo = crearPanelEquipo();
 
-        panelCards.add(
-                panelChat,
-                "CHAT"
-        );
+        panelCards.add(panelChat,"CHAT" );
 
-        panelCards.add(
-                panelCambiar,
-                "CAMBIAR"
-        );
+        panelCards.add(panelCambiar,  "CAMBIAR");
 
-        panelCards.add(
-                panelObjetos,
-                "OBJETOS"
-        );
+        panelCards.add( panelObjetos,"OBJETOS");
 
-        panelCards.add(
-                panelEquipo,
-                "EQUIPO"
-        );
+        panelCards.add( panelEquipo, "EQUIPO" );
 
-        cardLayout.show(
-                panelCards,
-                "CHAT"
-        );
+        cardLayout.show( panelCards,"CHAT" );
     }
 
     private JPanel crearPanelChat() {
-        JPanel panel = new JPanel(
-                new BorderLayout()
-        );
+        JPanel panel = new JPanel( new BorderLayout());
 
-        panel.setBorder(
-                BorderFactory.createTitledBorder(
-                        "Historial de batalla"
-                )
-        );
+        panel.setBorder(BorderFactory.createTitledBorder( "Historial de batalla" ) );
 
         areaHistorial = new JTextArea();
         areaHistorial.setEditable(false);
         areaHistorial.setLineWrap(true);
         areaHistorial.setWrapStyleWord(true);
 
-        JScrollPane scroll = new JScrollPane(
-                areaHistorial
-        );
+        JScrollPane scroll = new JScrollPane(areaHistorial );
 
-        panel.add(
-                scroll,
-                BorderLayout.CENTER
-        );
+        panel.add(scroll, BorderLayout.CENTER );
 
         return panel;
     }
 
     private JPanel crearPanelCambiar() {
-        JPanel panel = new JPanel(
-                new BorderLayout()
-        );
+        JPanel panel = new JPanel( new BorderLayout());
 
-        JLabel titulo = new JLabel(
-                "Aquí se mostrarán los Pokémon disponibles"
-        );
+        JLabel titulo = new JLabel( "Aquí se mostrarán los Pokémon disponibles");
 
-        titulo.setHorizontalAlignment(
-                SwingConstants.CENTER
-        );
+        titulo.setHorizontalAlignment(SwingConstants.CENTER );
 
-        panel.add(
-                titulo,
-                BorderLayout.CENTER
-        );
+        panel.add(titulo,BorderLayout.CENTER );
 
         return panel;
     }
 
-    private JPanel crearPanelObjetos() {
-        JPanel panel = new JPanel(
-                new BorderLayout()
-        );
-
-        JLabel titulo = new JLabel(
-                "Aquí se mostrarán los objetos disponibles"
-        );
-
-        titulo.setHorizontalAlignment(
-                SwingConstants.CENTER
-        );
-
-        panel.add(
-                titulo,
-                BorderLayout.CENTER
-        );
-
-        return panel;
-    }
+    
 
     private JPanel crearPanelEquipo() {
-        JPanel panel = new JPanel(
-                new BorderLayout()
-        );
+        JPanel panel = new JPanel( new BorderLayout());
 
-        JLabel titulo = new JLabel(
-                "Aquí se mostrará el estado del equipo"
-        );
+        JLabel titulo = new JLabel("Aquí se mostrará el estado del equipo");
 
-        titulo.setHorizontalAlignment(
-                SwingConstants.CENTER
-        );
+        titulo.setHorizontalAlignment(SwingConstants.CENTER);
 
-        panel.add(
-                titulo,
-                BorderLayout.CENTER
-        );
+        panel.add(titulo,BorderLayout.CENTER );
 
         return panel;
     }
@@ -495,37 +387,21 @@ public class GUIBatalla extends JPanel {
             String vidaJugador,
             String tipoJugador
     ) {
-        lblNombreRival.setText(
-                "Nombre: " + nombreRival
-        );
+        lblNombreRival.setText("Nombre: " + nombreRival);
 
-        lblNivelRival.setText(
-                "Nivel: " + nivelRival
-        );
+        lblNivelRival.setText( "Nivel: " + nivelRival);
 
-        lblVidaRival.setText(
-                "Vida: " + vidaRival
-        );
+        lblVidaRival.setText("Vida: " + vidaRival);
 
-        lblTipoRival.setText(
-                "Tipo: " + tipoRival
-        );
+        lblTipoRival.setText( "Tipo: " + tipoRival);
 
-        lblNombreJugador.setText(
-                "Nombre: " + nombreJugador
-        );
+        lblNombreJugador.setText("Nombre: " + nombreJugador );
 
-        lblNivelJugador.setText(
-                "Nivel: " + nivelJugador
-        );
+        lblNivelJugador.setText("Nivel: " + nivelJugador );
 
-        lblVidaJugador.setText(
-                "Vida: " + vidaJugador
-        );
+        lblVidaJugador.setText("Vida: " + vidaJugador   );
 
-        lblTipoJugador.setText(
-                "Tipo: " + tipoJugador
-        );
+        lblTipoJugador.setText( "Tipo: " + tipoJugador );
 
         revalidate();
         repaint();
@@ -535,38 +411,24 @@ public class GUIBatalla extends JPanel {
         if (areaHistorial.getText().isEmpty()) {
             areaHistorial.setText(texto);
         } else {
-            areaHistorial.append(
-                    "\n" + texto
-            );
+            areaHistorial.append("\n" + texto  );
         }
     }
 
     public void mostrarChat() {
-        cardLayout.show(
-                panelCards,
-                "CHAT"
-        );
+        cardLayout.show( panelCards, "CHAT" );
     }
 
     public void mostrarCambiarPokemon() {
-        cardLayout.show(
-                panelCards,
-                "CAMBIAR"
-        );
+        cardLayout.show(panelCards, "CAMBIAR");
     }
 
     public void mostrarObjetos() {
-        cardLayout.show(
-                panelCards,
-                "OBJETOS"
-        );
+        cardLayout.show( panelCards, "OBJETOS");
     }
 
     public void mostrarEquipo() {
-        cardLayout.show(
-                panelCards,
-                "EQUIPO"
-        );
+        cardLayout.show( panelCards, "EQUIPO" );
     }
 
     public void establecerNombreRival(String nombre) {
@@ -586,23 +448,17 @@ public class GUIBatalla extends JPanel {
             imagen = lblImagenJugador;
         }
 
-        if (timerDanio != null
-                && timerDanio.isRunning()) {
+        if (timerDanio != null&& timerDanio.isRunning()) {
             timerDanio.stop();
         }
 
         final int[] contador = {0};
 
-        timerDanio = new Timer(
-                100,
-                new ActionListener() {
-            @Override
+        timerDanio = new Timer(  100,new ActionListener() {
+            
             public void actionPerformed(
-                    ActionEvent e
-            ) {
-                imagen.setVisible(
-                        !imagen.isVisible()
-                );
+                    ActionEvent e ) {
+                imagen.setVisible( !imagen.isVisible());
 
                 contador[0]++;
 
@@ -616,9 +472,7 @@ public class GUIBatalla extends JPanel {
         timerDanio.start();
     }
 
-    public void establecerImagenRival(
-            ImageIcon imagen
-    ) {
+    public void establecerImagenRival(ImageIcon imagen ) {
         lblImagenRival.setText("");
         lblImagenRival.setIcon(imagen);
     }
@@ -628,4 +482,7 @@ public class GUIBatalla extends JPanel {
         lblImagenJugador.setText("");
         lblImagenJugador.setIcon(imagen);
     }
+    
+   
+    
 }
