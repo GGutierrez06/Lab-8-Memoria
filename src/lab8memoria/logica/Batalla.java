@@ -101,7 +101,7 @@ public class Batalla {
         double multiplicador = tablaTipos.multiplicador(ataque.getTipo(), defensor.getTipo());
         int base = (atacante.getNivel() + ataque.getPoder()) / 5;
         int danio = (int) (base * multiplicador);
-        if (danio < 1) {
+        if (multiplicador > 0 && danio < 1) {
             danio = 1;
         }
         return danio;

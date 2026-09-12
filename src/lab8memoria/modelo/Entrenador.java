@@ -52,6 +52,17 @@ public class Entrenador {
         return equipo.contarDisponibles();
     }
 
+    public void curarEquipoCompleto() {
+        int total = equipo.contar();
+        for (int i = 0; i < total; i++) {
+            Pokemon pokemon = equipo.obtenerPorIndice(i);
+            if (pokemon.estaDerrotado()) {
+                pokemon.revivir();
+            }
+            pokemon.curar(pokemon.getHpMaximo());
+        }
+    }
+
     public String toString() {
         return nombre + " (" + equipo.contarDisponibles() + " de " + equipo.contar() + " disponibles)";
     }

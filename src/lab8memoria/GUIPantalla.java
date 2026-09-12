@@ -114,6 +114,8 @@ public class GUIPantalla  extends JFrame {
             this.usuarioActual = null;
             this.rival = rivalElegido;
             establecerJugador(jugadorDemo);
+            jugadorDemo.curarEquipoCompleto();
+            rivalElegido.curarEquipoCompleto();
             batalla.iniciarBatalla(jugadorDemo, rivalElegido);
             mostrarCard("batalla");
         } catch (IOException e) {
@@ -126,18 +128,18 @@ public class GUIPantalla  extends JFrame {
             JOptionPane.showMessageDialog(this, "No hay jugador activo.");
             return;
         }
-        if (rival == null) {
-            try {
-                rival = gestorArchivos.cargarRivalAleatorio();
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error cargando rival: " + e.getMessage());
-                return;
-            }
-            if (rival == null) {
-                JOptionPane.showMessageDialog(this, "No hay rivales precargados todavia.");
-                return;
-            }
+        try {
+            rival = gestorArchivos.cargarRivalAleatorio();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error cargando rival: " + e.getMessage());
+            return;
         }
+        if (rival == null) {
+            JOptionPane.showMessageDialog(this, "No hay rivales precargados todavia.");
+            return;
+        }
+        jugador.curarEquipoCompleto();
+        rival.curarEquipoCompleto();
         batalla.iniciarBatalla(jugador, rival);
         mostrarCard("batalla");
     }
