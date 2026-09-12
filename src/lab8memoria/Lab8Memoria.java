@@ -8,13 +8,17 @@ package lab8memoria;
  *
  * @author gabri
  */
+import javax.swing.SwingUtilities;
 public class Lab8Memoria {
 
     /**
      * @param args the command line arguments
      */
+    
+    
     public static void main(String[] args) {
         // TODO code application logic here
+        SwingUtilities.invokeLater(() -> new GUIPantalla().setVisible(true));
     }
     
 }
