@@ -12,6 +12,7 @@ package lab8memoria;
 import java.awt.*;
 import javax.swing.*;
 
+import lab8memoria.modelo.Ataque;
 import lab8memoria.modelo.Entrenador;
 import lab8memoria.modelo.ListaEnlazada;
 import lab8memoria.modelo.Pokemon;
@@ -31,6 +32,7 @@ public class GUIAdministrador extends JDialog {
     private JButton btnBuscar;
     private JButton btnEliminar;
     private JButton btnMover;
+    private JButton btnVolver;
 
     private ButtonGroup grupoPokemon;
     private JToggleButton[] botonesPokemon;
@@ -110,52 +112,53 @@ public class GUIAdministrador extends JDialog {
         btnBuscar = new JButton("Buscar");
         btnEliminar = new JButton("Eliminar");
         btnMover = new JButton("Mover");
+        btnVolver = new JButton("Volver");
 
         btnAgregar.setFocusable(false);
         btnBuscar.setFocusable(false);
         btnEliminar.setFocusable(false);
         btnMover.setFocusable(false);
+        btnVolver.setFocusable(false);
+
+        btnVolver.addActionListener(e -> dispose());
 
         
         btnAgregar.addActionListener(e -> {
-            JTextField campoNombre = new JTextField();
-            JTextField campoTipo = new JTextField();
-            JTextField campoNivel = new JTextField();
-            JTextField campoHpMaximo = new JTextField();
+            ListaEnlazada catalogo;
+            try {
+                catalogo = pantalla.getGestorArchivos().cargarCatalogo();
+            } catch (java.io.IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error cargando catalogo: " + ex.getMessage());
+                return;
+            }
 
-            JPanel formulario = new JPanel(new GridLayout(4, 2, 5, 5));
-            formulario.add(new JLabel("Nombre:"));
-            formulario.add(campoNombre);
-            formulario.add(new JLabel("Tipo:"));
-            formulario.add(campoTipo);
-            formulario.add(new JLabel("Nivel:"));
-            formulario.add(campoNivel);
-            formulario.add(new JLabel("Vida maxima:"));
-            formulario.add(campoHpMaximo);
+            int totalCatalogo = catalogo.contar();
+            if (totalCatalogo == 0) {
+                JOptionPane.showMessageDialog(this, "No hay pokemones en el catalogo todavia.");
+                return;
+            }
+
+            JComboBox<String> comboPokemon = new JComboBox<>();
+            for (int i = 0; i < totalCatalogo; i++) {
+                comboPokemon.addItem(catalogo.obtenerPorIndice(i).getNombre());
+            }
+
+            JPanel formulario = new JPanel(new BorderLayout(5, 5));
+            formulario.add(new JLabel("Pokemon:"), BorderLayout.WEST);
+            formulario.add(comboPokemon, BorderLayout.CENTER);
 
             int opcion = JOptionPane.showConfirmDialog(this, formulario, "Agregar pokemon", JOptionPane.OK_CANCEL_OPTION);
             if (opcion != JOptionPane.OK_OPTION) {
                 return;
             }
 
-            String nombre = campoNombre.getText().trim();
-            String tipo = campoTipo.getText().trim();
-            if (nombre.isEmpty() || tipo.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nombre y tipo son obligatorios.");
+            String nombreElegido = (String) comboPokemon.getSelectedItem();
+            Pokemon base = catalogo.buscar(nombreElegido);
+            if (base == null) {
                 return;
             }
 
-            int nivel;
-            int hpMaximo;
-            try {
-                nivel = Integer.parseInt(campoNivel.getText().trim());
-                hpMaximo = Integer.parseInt(campoHpMaximo.getText().trim());
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Nivel y vida deben ser numeros.");
-                return;
-            }
-
-            pantalla.getJugador().getEquipo().insertar(new Pokemon(nombre, tipo, nivel, hpMaximo));
+            pantalla.getJugador().getEquipo().insertar(clonarPokemon(base));
             pintarEquipo();
         });
 
@@ -202,6 +205,7 @@ public class GUIAdministrador extends JDialog {
         panelBotones.add(btnBuscar);
         panelBotones.add(btnEliminar);
         panelBotones.add(btnMover);
+        panelBotones.add(btnVolver);
 
         panelInferior.add(panelBotones, BorderLayout.CENTER);
 
@@ -287,6 +291,16 @@ public class GUIAdministrador extends JDialog {
         ImageIcon icono = new ImageIcon(recurso);
         Image imagen = icono.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         return new ImageIcon(imagen);
+    }
+
+    private Pokemon clonarPokemon(Pokemon original) {
+        Pokemon copia = new Pokemon(original.getNombre(), original.getTipo(), original.getNivel(),
+                original.getHpMaximo());
+        for (int i = 0; i < original.cantidadAtaques(); i++) {
+            Ataque ataque = original.obtenerAtaque(i);
+            copia.agregarAtaque(ataque);
+        }
+        return copia;
     }
 
     private JToggleButton obtenerPokemonSeleccionado() {
