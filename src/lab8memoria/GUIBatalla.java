@@ -11,6 +11,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
@@ -611,6 +612,36 @@ public class GUIBatalla extends JPanel {
         String tipoRival = activoRival != null ? activoRival.getTipo() : "-";
 
         refrescarInformacion(nombreRival, nivelRival, vidaRival, tipoRival,nombreJugador, nivelJugador, vidaJugador, tipoJugador);
+
+        ImageIcon spriteJugador = obtenerSpriteBatalla(activoJugador != null ? activoJugador.getNombre() : null);
+        if (spriteJugador != null) {
+            establecerImagenJugador(spriteJugador);
+        }
+
+        ImageIcon spriteRival = obtenerSpriteBatalla(activoRival != null ? activoRival.getNombre() : null);
+        if (spriteRival != null) {
+            establecerImagenRival(spriteRival);
+        }
+    }
+
+    private ImageIcon obtenerSpriteBatalla(String nombrePokemon) {
+        if (nombrePokemon == null) {
+            return null;
+        }
+
+        String archivo = nombrePokemon;
+        if (archivo.equalsIgnoreCase("Bulbasaur")) {
+            archivo = "Bulbasour";
+        }
+
+        java.net.URL recurso = getClass().getResource("/SpritesPokemons/" + archivo + "Sprite2.png");
+        if (recurso == null) {
+            return null;
+        }
+
+        ImageIcon icono = new ImageIcon(recurso);
+        Image imagen = icono.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
+        return new ImageIcon(imagen);
     }
 
 }
