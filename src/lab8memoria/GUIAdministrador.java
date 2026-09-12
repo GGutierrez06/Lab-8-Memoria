@@ -43,8 +43,9 @@ public class GUIAdministrador extends JDialog {
         if (pantalla.getJugador() == null) {
             Entrenador demo = new Entrenador("Entrenador de prueba");
             demo.agregarPokemon(new Pokemon("Pikachu", "Electrico", 15, 100));
-            demo.agregarPokemon(new Pokemon("Charizard", "Fuego", 18, 120));
+            demo.agregarPokemon(new Pokemon("Charmander", "Fuego", 18, 120));
             demo.agregarPokemon(new Pokemon("Bulbasaur", "Planta", 14, 90));
+            demo.agregarPokemon(new Pokemon("Squirtle", "Agua", 16, 95));
             pantalla.establecerJugador(demo);
         }
 
@@ -226,7 +227,7 @@ public class GUIAdministrador extends JDialog {
                     p.getHp() + "/" + p.getHpMaximo(),
                     p.getTipo() );
 
-            JToggleButton botonPokemon =new JToggleButton(informacion);
+            JToggleButton botonPokemon =new JToggleButton(informacion, obtenerSprite(p.getNombre()));
 
             botonPokemon.setFont(new Font("Monospaced", Font.PLAIN, 14) );
 
@@ -270,6 +271,22 @@ public class GUIAdministrador extends JDialog {
 
         panelLista.revalidate();
         panelLista.repaint();
+    }
+
+    private ImageIcon obtenerSprite(String nombrePokemon) {
+        String archivo = nombrePokemon;
+        if (archivo.equalsIgnoreCase("Bulbasaur")) {
+            archivo = "Bulbasour";
+        }
+
+        java.net.URL recurso = getClass().getResource("/SpritesPokemons/" + archivo + "Sprite1.png");
+        if (recurso == null) {
+            return null;
+        }
+
+        ImageIcon icono = new ImageIcon(recurso);
+        Image imagen = icono.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        return new ImageIcon(imagen);
     }
 
     private JToggleButton obtenerPokemonSeleccionado() {
