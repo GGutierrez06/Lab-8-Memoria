@@ -64,7 +64,10 @@ public class GUIBatalla extends JPanel {
     private GUIObjetos panelObjetos;
     private  GUIMiEquipo panelEquipo;
     private JTextArea areaHistorial;
-    private Timer timerDanio;
+    private Timer timerDanioRival;
+    private Timer timerDanioJugador;
+    private Icon iconoActualRival;
+    private Icon iconoActualJugador;
     private Batalla batalla;
     private Entrenador jugador;
     private Entrenador rival;
@@ -468,55 +471,56 @@ public class GUIBatalla extends JPanel {
     }
 
     public void parpadearDanio(boolean esRival) {
-        JLabel imagen;
+        JLabel imagen = esRival ? lblImagenRival : lblImagenJugador;
+        Icon iconoOriginal = esRival ? iconoActualRival : iconoActualJugador;
 
-        if (esRival) {
-            imagen = lblImagenRival;
-        } else {
-            imagen = lblImagenJugador;
+        Timer timerAnterior = esRival ? timerDanioRival : timerDanioJugador;
+        if (timerAnterior != null && timerAnterior.isRunning()) {
+            timerAnterior.stop();
+            imagen.setIcon(iconoOriginal);
         }
 
-        if (timerDanio != null && timerDanio.isRunning()) {
-            timerDanio.stop();
-        }
-
-        final Icon iconoOriginal = imagen.getIcon();
-        final String textoOriginal = imagen.getText();
         final int[] contador = {0};
+        final Timer[] timerNuevo = new Timer[1];
 
-        timerDanio = new Timer(100, e -> {
+        timerNuevo[0] = new Timer(100, e -> {
             contador[0]++;
 
             if (contador[0] % 2 == 1) {
                 imagen.setIcon(null);
-                imagen.setText("");
             } else {
                 imagen.setIcon(iconoOriginal);
-                imagen.setText(textoOriginal);
             }
 
             if (contador[0] >= 6) {
                 imagen.setIcon(iconoOriginal);
-                imagen.setText(textoOriginal);
-                timerDanio.stop();
+                timerNuevo[0].stop();
             }
 
             imagen.revalidate();
             imagen.repaint();
         });
 
-        timerDanio.start();
+        if (esRival) {
+            timerDanioRival = timerNuevo[0];
+        } else {
+            timerDanioJugador = timerNuevo[0];
+        }
+
+        timerNuevo[0].start();
     }
 
     public void establecerImagenRival(ImageIcon imagen ) {
         lblImagenRival.setText("");
         lblImagenRival.setIcon(imagen);
+        iconoActualRival = imagen;
     }
 
     public void establecerImagenJugador(
             ImageIcon imagen) {
         lblImagenJugador.setText("");
         lblImagenJugador.setIcon(imagen);
+        iconoActualJugador = imagen;
     }
 
 

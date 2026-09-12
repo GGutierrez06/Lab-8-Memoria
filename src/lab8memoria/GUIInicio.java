@@ -21,26 +21,40 @@ public class GUIInicio extends JPanel {
     private JPanel panel;
     private CardLayout cardLayout;
     private JPanel cards;
+    private Image imagenFondo;
 
-  
-    
-    
+
+
+
     public GUIInicio(CardLayout cardLayout, JPanel cards, GUIPantalla padre){
-        
+
      this.cardLayout = cardLayout;
      this.cards = cards;
-    
+
     setLayout(new BorderLayout(10, 10));
-    
-   
-   
-    
-    
+
+    cargarFondo();
+
+
     Inicializarbotones(padre);
 
      setVisible(true);
-     
-    
+
+
+    }
+
+    private void cargarFondo() {
+        java.net.URL recurso = getClass().getResource("/Imagenes/fondo.png");
+        if (recurso != null) {
+            imagenFondo = new ImageIcon(recurso).getImage();
+        }
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (imagenFondo != null) {
+            g.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+        }
     }
     
     
