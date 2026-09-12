@@ -600,9 +600,7 @@ public class GUIBatalla extends JPanel {
         refrescarInformacion(nombreRival, nivelRival, vidaRival, tipoRival,nombreJugador, nivelJugador, vidaJugador, tipoJugador);
     }
 
-    public Entrenador getJugador() {
-        return jugador;
-    }
+    
     
     
 
