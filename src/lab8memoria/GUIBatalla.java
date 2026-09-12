@@ -316,13 +316,19 @@ public class GUIBatalla extends JPanel {
 
         btnObjetos.addActionListener(e -> cardLayout.show(panelCards, "OBJETOS")  );
 
-        btnMiEquipo.addActionListener(e -> cardLayout.show(panelCards, "EQUIPO") );
+        btnMiEquipo.addActionListener(e -> {
+            panelEquipo.recargarLista();
+            cardLayout.show(panelCards, "EQUIPO");
+        });
 
         panelControles.add(btnAtacar);
         panelControles.add(btnCambiar);
         panelControles.add(btnObjetos);
         panelControles.add(btnMiEquipo);
+        
     }
+        
+    
 
     private void crearPanelCards() {
         cardLayout = new CardLayout();
@@ -573,5 +579,11 @@ public class GUIBatalla extends JPanel {
 
         refrescarInformacion(nombreRival, nivelRival, vidaRival, tipoRival,nombreJugador, nivelJugador, vidaJugador, tipoJugador);
     }
+
+    public Entrenador getJugador() {
+        return jugador;
+    }
+    
+    
 
 }
