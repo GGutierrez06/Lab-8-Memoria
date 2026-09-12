@@ -22,11 +22,9 @@ public class GUIPantalla  extends JFrame {
     private GUICrearCuenta crear;
     private GUIInicio inicio;
     private GUIMenu menu;
-<<<<<<< HEAD
     private GUIBatalla batalla;
-=======
+
     private Entrenador jugador;
->>>>>>> 705dd92a74e41b028e205732f7ee51b8610e4615
 
   
     public GUIPantalla() {
