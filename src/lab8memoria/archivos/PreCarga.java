@@ -10,73 +10,51 @@ public class PreCarga {
     public static ListaEnlazada crearCatalogoBase() {
         ListaEnlazada catalogo = new ListaEnlazada();
 
-        Pokemon flamitor = new Pokemon("Charizard", "Fuego", 8, 40);
-        flamitor.agregarAtaque(new Ataque("Llamarada", "Fuego", 35));
-        flamitor.agregarAtaque(new Ataque("Arañazo", "Normal", 15));
-        catalogo.insertar(flamitor);
+        Pokemon charmander = new Pokemon("Charmander", "Fuego", 5, 35);
+        charmander.agregarAtaque(new Ataque("Ascuas", "Fuego", 28));
+        charmander.agregarAtaque(new Ataque("Arañazo", "Normal", 15));
+        catalogo.insertar(charmander);
 
-        Pokemon rapidash = new Pokemon("Rapidash", "Fuego", 10, 45);
-        rapidash.agregarAtaque(new Ataque("Bola de Fuego", "Fuego", 30));
-        rapidash.agregarAtaque(new Ataque("Placaje", "Normal", 12));
-        catalogo.insertar(rapidash);
+        Pokemon squirtle = new Pokemon("Squirtle", "Agua", 5, 36);
+        squirtle.agregarAtaque(new Ataque("Pistola Agua", "Agua", 28));
+        squirtle.agregarAtaque(new Ataque("Placaje", "Normal", 12));
+        catalogo.insertar(squirtle);
 
-        Pokemon blastoise = new Pokemon("Blastoise", "Agua", 9, 42);
-        blastoise.agregarAtaque(new Ataque("Hidrobomba", "Agua", 32));
-        blastoise.agregarAtaque(new Ataque("Placaje", "Normal", 12));
-        catalogo.insertar(blastoise);
-
-        Pokemon poliwrath = new Pokemon("Poliwrath", "Agua", 11, 50);
-        poliwrath.agregarAtaque(new Ataque("Chorro de Agua", "Agua", 28));
-        poliwrath.agregarAtaque(new Ataque("Golpe Cuerpo", "Normal", 18));
-        catalogo.insertar(poliwrath);
-
-        Pokemon venusaur = new Pokemon("Venusaur", "Planta", 9, 43);
-        venusaur.agregarAtaque(new Ataque("Latigo Cepa", "Planta", 30));
-        venusaur.agregarAtaque(new Ataque("Placaje", "Normal", 12));
-        catalogo.insertar(venusaur);
+        Pokemon bulbasaur = new Pokemon("Bulbasaur", "Planta", 5, 39);
+        bulbasaur.agregarAtaque(new Ataque("Hoja Afilada", "Planta", 27));
+        bulbasaur.agregarAtaque(new Ataque("Placaje", "Normal", 12));
+        catalogo.insertar(bulbasaur);
 
         Pokemon pikachu = new Pokemon("Pikachu", "Electrico", 10, 38);
         pikachu.agregarAtaque(new Ataque("Impactrueno", "Electrico", 33));
         pikachu.agregarAtaque(new Ataque("Placaje", "Normal", 12));
         catalogo.insertar(pikachu);
 
-        Pokemon gengar = new Pokemon("Gengar", "Fantasma", 12, 36);
-        gengar.agregarAtaque(new Ataque("Puno Sombra", "Fantasma", 34));
-        gengar.agregarAtaque(new Ataque("Arañazo", "Normal", 15));
-        catalogo.insertar(gengar);
-
-        Pokemon rattata = new Pokemon("Rattata", "Normal", 7, 46);
-        rattata.agregarAtaque(new Ataque("Golpe Cuerpo", "Normal", 20));
-        rattata.agregarAtaque(new Ataque("Placaje", "Normal", 12));
-        catalogo.insertar(rattata);
-
         return catalogo;
     }
 
     public static Entrenador[] crearRivalesBase(ListaEnlazada catalogo) {
         Entrenador[] rivales = new Entrenador[10];
-        rivales[0] = crearRival(catalogo, "Azul", "Charizard", "rattata");
-        rivales[1] = crearRival(catalogo, "Plata", "blastoise", "venusaur");
-        rivales[2] = crearRival(catalogo, "Bruna", "pikachu", "gengar");
-        rivales[3] = crearRival(catalogo, "Aura", "poliwrath", "rapidash");
-        rivales[4] = crearRival(catalogo, "Blasco", "rattata", "blastoise");
-        rivales[5] = crearRival(catalogo, "Bel", "venusaur", "pikachu");
-        rivales[6] = crearRival(catalogo, "N", "gengar", "Charizard");
-        rivales[7] = crearRival(catalogo, "Serena", "rapidash", "poliwrath");
-        rivales[8] = crearRival(catalogo, "Cheren", "pikachu", "rattata");
-        rivales[9] = crearRival(catalogo, "Xana", "gengar", "blastoise");
+        rivales[0] = crearRival(catalogo, "Azul", "charmander", "squirtle");
+        rivales[1] = crearRival(catalogo, "Plata", "charmander", "bulbasaur");
+        rivales[2] = crearRival(catalogo, "Bruna", "charmander", "pikachu");
+        rivales[3] = crearRival(catalogo, "Aura", "squirtle", "bulbasaur");
+        rivales[4] = crearRival(catalogo, "Blasco", "squirtle", "pikachu");
+        rivales[5] = crearRival(catalogo, "Bel", "bulbasaur", "pikachu");
+        rivales[6] = crearRival(catalogo, "N", "charmander", "squirtle");
+        rivales[7] = crearRival(catalogo, "Serena", "charmander", "bulbasaur");
+        rivales[8] = crearRival(catalogo, "Cheren", "charmander", "pikachu");
+        rivales[9] = crearRival(catalogo, "Xana", "squirtle", "bulbasaur");
         return rivales;
     }
 
-    private static Entrenador crearRival(ListaEnlazada catalogo, String nombre, String nombrePoke1, String nombrePoke2) {
+    private static Entrenador crearRival(ListaEnlazada catalogo, String nombre, String... nombresPokemon) {
         Entrenador rival = new Entrenador(nombre);
-        Pokemon base1 = catalogo.buscar(nombrePoke1);
-        if (base1 != null) {
-            rival.agregarPokemon(clonarPokemon(base1));
-        }
-        Pokemon base2 = catalogo.buscar(nombrePoke2);
-        if (base2 != null) {
-            rival.agregarPokemon(clonarPokemon(base2));
+        for (int i = 0; i < nombresPokemon.length; i++) {
+            Pokemon base = catalogo.buscar(nombresPokemon[i]);
+            if (base != null) {
+                rival.agregarPokemon(clonarPokemon(base));
+            }
         }
         return rival;
     }
